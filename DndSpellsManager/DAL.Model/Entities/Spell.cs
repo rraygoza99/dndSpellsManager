@@ -9,6 +9,7 @@ namespace DAL.Model.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }
-        
+        public ICollection<SpellSpellbook> SpellSpellbooks { get; set; }
+        public ICollection<SpellMaterial> SpellMaterials { get; set; }
     }
 }

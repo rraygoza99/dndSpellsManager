@@ -4,7 +4,9 @@ using System.Text;
 
 namespace DAL.Model.Entities
 {
-    class Spellbook
+    public class Spellbook
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

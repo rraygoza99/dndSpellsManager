@@ -222,4 +222,12 @@ namespace DAL.Data.Repository
 
         }
     }
+
+    public class DndRepository : EntityBaseRepository
+    {
+        public DndRepository(DndSpellContext context) : base(context)
+        {
+
+        }
+    }
 }

@@ -8,10 +8,11 @@ namespace DAL.Model.Entities
     {
         public Spellbook()
         {
-            Spells = new HashSet<Spell>();
+            Spells = new HashSet<SpellSpellbook>();
         }
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Spell> Spells { get; set; }
+        public int IdUser { get; set; }
+        public ICollection<SpellSpellbook> Spells { get; set; }
     }
 }

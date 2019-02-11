@@ -34,7 +34,7 @@ namespace BL.BusinessLogic.LogicHandler
             var spells = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a => a.Spells);
             var materials = _repository.GetAllWhere<SpellMaterial>(new List<System.Linq.Expressions.Expression<Func<SpellMaterial, bool>>>()
             {
-                a=> spells.Spells.ToList().Find(b=> b.Id == a.IdSpell) != null
+                a=> spells.Spells.ToList().Find(b=> b.IdSpell == a.IdSpell) != null
             }, null, false, a=> a.Material).ToList();
 
             var materialsSpellbook = new Dictionary<int, ShoppingMaterialViewModel>();
@@ -72,6 +72,44 @@ namespace BL.BusinessLogic.LogicHandler
                 TotalCupper = materialsSpellbook.Sum(a => a.Value.CupperCost),
             };
             return shoppingList;
+        }
+
+        public List<SpellbookViewModel> GetUsersSpellboks(int idUser)
+        {
+            var spellbook = _repository.GetAllWhere<Spellbook>(new List<System.Linq.Expressions.Expression<Func<Spellbook, bool>>>()
+            {
+                a=> a.IdUser == idUser
+            }).ToList();
+            return Mapper.Map<List<Spellbook>, List<SpellbookViewModel>>(spellbook);
+        }
+
+        public SpellbookViewModel GetSpellbookById(int idSpellbook)
+        {
+            var spellbook = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a => a.Spells);
+            var viewModel = Mapper.Map<Spellbook, SpellbookViewModel>(spellbook);
+            viewModel.Spells = GetSpellsBySpellbook(idSpellbook);
+            return viewModel;
+        }
+
+        public SpellsKnownViewModel GetSpellsBySpellbook(int idSpellbook)
+        {
+            var spellbook = _repository.GetAllWhere(new List<System.Linq.Expressions.Expression<Func<Spell, bool>>>()
+            {
+               a=> a.SpellSpellbooks.Where(b=> b.IdSpellbook == idSpellbook).First() != null
+            }).ToList();
+            var spells = new SpellsKnownViewModel();
+            var spellSort = Mapper.Map<List<Spell>, List<SpellViewModel>>(spellbook).ToLookup(a => a.Level);
+            spells.Cantrips = spellSort[0].ToList();
+            spells.Level1 = spellSort[1].ToList();
+            spells.Level2 = spellSort[2].ToList();
+            spells.Level3 = spellSort[3].ToList();
+            spells.Level4 = spellSort[4].ToList();
+            spells.Level5 = spellSort[5].ToList();
+            spells.Level6 = spellSort[6].ToList();
+            spells.Level7 = spellSort[7].ToList();
+            spells.Level8 = spellSort[8].ToList();
+            spells.Level9 = spellSort[9].ToList();
+            return spells;
         }
     }
 }

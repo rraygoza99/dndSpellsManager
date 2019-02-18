@@ -88,6 +88,7 @@ namespace BL.BusinessLogic.LogicHandler
             var spellbook = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a => a.Spells);
             var viewModel = Mapper.Map<Spellbook, SpellbookViewModel>(spellbook);
             viewModel.Spells = GetSpellsBySpellbook(idSpellbook);
+            viewModel.SpellbookFocusType = GetFocusType(spellbook.Spells.ToList());
             return viewModel;
         }
 
@@ -112,5 +113,43 @@ namespace BL.BusinessLogic.LogicHandler
             return spells;
         }
 
+        public SpellbookFocusType GetFocusType(int idSpellbook)
+        {
+            var spellBook = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a=> a.Spells);
+            var spells = _repository.GetAllWhere<Spell>(new List<System.Linq.Expressions.Expression<Func<Spell, bool>>>()
+            {
+                a=> spellBook.Spells.Where(b=> b.IdSpell == a.Id).First() != null
+            });
+
+            var focusType = new SpellbookFocusType
+            {
+                TotalSpells = spellBook.Spells.Count(),
+                DamageSpells = spells.Where(a => a.SpellType == SpellType.Damage).Count(),
+                HealingSpells = spells.Where(a => a.SpellType == SpellType.Healing).Count(),
+                MobilitySpell = spells.Where(a => a.SpellType == SpellType.Mobility).Count(),
+                UtilitySpells = spells.Where(a => a.SpellType == SpellType.Utility).Count()
+            };
+
+            return focusType;
+        }
+
+        public SpellbookFocusType GetFocusType(List<SpellSpellbook> spellsBook)
+        {
+            var spells = _repository.GetAllWhere<Spell>(new List<System.Linq.Expressions.Expression<Func<Spell, bool>>>()
+            {
+                a=> spellsBook.Where(b=> b.IdSpell == a.Id).First() != null
+            });
+
+            var focusType = new SpellbookFocusType
+            {
+                TotalSpells = spellsBook.Count(),
+                DamageSpells = spells.Where(a => a.SpellType == SpellType.Damage).Count(),
+                HealingSpells = spells.Where(a => a.SpellType == SpellType.Healing).Count(),
+                MobilitySpell = spells.Where(a => a.SpellType == SpellType.Mobility).Count(),
+                UtilitySpells = spells.Where(a => a.SpellType == SpellType.Utility).Count()
+            };
+
+            return focusType;
+        }
     }
 }

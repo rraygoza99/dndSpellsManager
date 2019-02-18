@@ -15,7 +15,9 @@ namespace DAL.Model.Entities
         public int IdUser { get; set; }
         public string NameCharacter { get; set; }
         public int IdClass { get; set; }
-        public int Levelcharacter { get; set; }
+        public int LevelCharacter { get; set; }
+        public SpellType PrincipalFocusType { get; set; }
+        public SpellType ? SideFocusType { get; set; }
 
         public ICollection<SpellSpellbook> Spells { get; set; }
         public User User { get; set; }

@@ -111,5 +111,6 @@ namespace BL.BusinessLogic.LogicHandler
             spells.Level9 = spellSort[9].ToList();
             return spells;
         }
+
     }
 }

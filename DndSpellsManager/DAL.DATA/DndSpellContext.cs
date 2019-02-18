@@ -13,6 +13,7 @@ namespace DAL.Data
         public virtual DbSet<Spellbook> Spellbooks { get; set; }
         public virtual DbSet<SpellMaterial> SpellMaterials { get; set; }
         public virtual DbSet<SpellSpellbook> SpellSpellbooks { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         public DndSpellContext(DbContextOptions<DndSpellContext> options) : base(options)
         {
@@ -20,7 +21,6 @@ namespace DAL.Data
         }
         public DndSpellContext() : base()
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

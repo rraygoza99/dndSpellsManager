@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Model.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,6 +10,7 @@ namespace BL.BusinessLogic.ViewModel
         public int Id { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }
+        public SpellType SpellType { get; set; }
     }
 
     public class SpellsKnownViewModel
@@ -36,5 +38,20 @@ namespace BL.BusinessLogic.ViewModel
         public List<SpellViewModel> Level8 { get; set; }
         public List<SpellViewModel> Level9 { get; set; }
         public List<SpellViewModel> Cantrips { get; set; }
+    }
+
+    public class SpellByTypeViewModel
+    {
+        public SpellByTypeViewModel()
+        {
+            DamageType = new HashSet<SpellsKnownViewModel>();
+            HealingType = new HashSet<SpellsKnownViewModel>();
+            UtilityType = new HashSet<SpellsKnownViewModel>();
+            MobilityType = new HashSet<SpellsKnownViewModel>();
+        }
+        public ICollection<SpellsKnownViewModel> DamageType { get; set; }
+        public ICollection<SpellsKnownViewModel> HealingType { get; set; }
+        public ICollection<SpellsKnownViewModel> UtilityType { get; set; }
+        public ICollection<SpellsKnownViewModel> MobilityType { get; set; }
     }
 }

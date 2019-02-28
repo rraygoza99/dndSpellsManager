@@ -31,10 +31,10 @@ namespace BL.BusinessLogic.LogicHandler
 
         public ShoppingListViewModel GetShoppingList(int idSpellbook)
         {
-            var spells = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a => a.Spells);
+            var spells = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a => a.SpellbookSpells);
             var materials = _repository.GetAllWhere<SpellMaterial>(new List<System.Linq.Expressions.Expression<Func<SpellMaterial, bool>>>()
             {
-                a=> spells.Spells.ToList().Find(b=> b.IdSpell == a.IdSpell) != null
+                a=> spells.SpellbookSpells.ToList().Find(b=> b.IdSpell == a.IdSpell) != null
             }, null, false, a=> a.Material).ToList();
 
             var materialsSpellbook = new Dictionary<int, ShoppingMaterialViewModel>();
@@ -85,10 +85,10 @@ namespace BL.BusinessLogic.LogicHandler
 
         public SpellbookViewModel GetSpellbookById(int idSpellbook)
         {
-            var spellbook = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a => a.Spells);
+            var spellbook = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a => a.SpellbookSpells);
             var viewModel = Mapper.Map<Spellbook, SpellbookViewModel>(spellbook);
             viewModel.Spells = GetSpellsBySpellbook(idSpellbook);
-            viewModel.SpellbookFocusType = GetFocusType(spellbook.Spells.ToList());
+            viewModel.SpellbookFocusType = GetFocusType(spellbook.SpellbookSpells.ToList());
             return viewModel;
         }
 
@@ -115,15 +115,15 @@ namespace BL.BusinessLogic.LogicHandler
 
         public SpellbookFocusType GetFocusType(int idSpellbook)
         {
-            var spellBook = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a=> a.Spells);
+            var spellBook = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a=> a.SpellbookSpells);
             var spells = _repository.GetAllWhere<Spell>(new List<System.Linq.Expressions.Expression<Func<Spell, bool>>>()
             {
-                a=> spellBook.Spells.Where(b=> b.IdSpell == a.Id).First() != null
+                a=> spellBook.SpellbookSpells.Where(b=> b.IdSpell == a.Id).First() != null
             });
 
             var focusType = new SpellbookFocusType
             {
-                TotalSpells = spellBook.Spells.Count(),
+                TotalSpells = spellBook.SpellbookSpells.Count(),
                 DamageSpells = spells.Where(a => a.SpellType == SpellType.Damage).Count(),
                 HealingSpells = spells.Where(a => a.SpellType == SpellType.Healing).Count(),
                 MobilitySpell = spells.Where(a => a.SpellType == SpellType.Mobility).Count(),

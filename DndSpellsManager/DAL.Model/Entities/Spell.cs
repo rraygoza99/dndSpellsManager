@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DAL.Model.Entities
 {
+    [Table("spell")]
     public class Spell
     {
         public Spell()
@@ -12,12 +14,26 @@ namespace DAL.Model.Entities
             SpellMaterials = new HashSet<SpellMaterial>();
             SpellClasses = new HashSet<SpellClass>();
         }
+
+        [Column("id_spell")]
         public int Id { get; set; }
+
+        [Column("name")]
         public string Name { get; set; }
+
+        [Column("level")]
         public int Level { get; set; }
+
+        [Column("spell_type")]
         public SpellType SpellType { get; set; }
+
+        [InverseProperty("Spell")]
         public ICollection<SpellSpellbook> SpellSpellbooks { get; set; }
+
+        [InverseProperty("Spell")]
         public ICollection<SpellMaterial> SpellMaterials { get; set; }
+
+        [InverseProperty("Spell")]
         public ICollection<SpellClass> SpellClasses { get; set; }
     }
 

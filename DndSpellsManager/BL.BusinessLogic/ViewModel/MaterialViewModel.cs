@@ -7,7 +7,7 @@ namespace BL.BusinessLogic.ViewModel
     public class MaterialViewModel
     {
         public int Id { get; set; }
-        public int Description { get; set; }
+        public string Description { get; set; }
         public int GoldCost { get; set; }
         public int ElectrumCost { get; set; }
         public int CupperCost { get; set; }

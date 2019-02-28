@@ -10,7 +10,7 @@ namespace DAL.Model.Entities
     {
         public Class()
         {
-            Spells = new HashSet<Spell>();
+            Spells = new HashSet<SpellClass>();
         }
 
         [Column("id_class")]

@@ -13,7 +13,9 @@ namespace DAL.Data
         public virtual DbSet<Spellbook> Spellbooks { get; set; }
         public virtual DbSet<SpellMaterial> SpellMaterials { get; set; }
         public virtual DbSet<SpellSpellbook> SpellSpellbooks { get; set; }
+        public virtual DbSet<SpellClass> SpellClasses { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Class> Classes { get; set; }
 
         public DndSpellContext(DbContextOptions<DndSpellContext> options) : base(options)
         {
@@ -30,6 +32,8 @@ namespace DAL.Data
                 .HasKey(k => new { k.IdMaterial, k.IdSpell });
             modelBuilder.Entity<SpellSpellbook>()
                 .HasKey(k => new { k.IdSpell, k.IdSpellbook });
+            modelBuilder.Entity<SpellClass>()
+                .HasKey(k => new { k.IdClass, k.IdSpell });
         }
     }
 }

@@ -11,6 +11,7 @@ namespace BL.BusinessLogic.ViewModel
         public string Name { get; set; }
         public int Level { get; set; }
         public SpellType SpellType { get; set; }
+        public bool Deleted { get; set; }
     }
 
     public class SpellsKnownViewModel

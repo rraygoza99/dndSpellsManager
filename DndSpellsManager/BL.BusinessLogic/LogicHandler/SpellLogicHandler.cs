@@ -151,5 +151,39 @@ namespace BL.BusinessLogic.LogicHandler
 
             return focusType;
         }
+
+        public SpellViewModel CreateSpell(SpellViewModel viewModel)
+        {
+            var entity = Mapper.Map<SpellViewModel, Spell>(viewModel);
+            _repository.Add(entity);
+            _repository.Commit();
+            return Mapper.Map<Spell, SpellViewModel>(_repository.GetSingle<Spell>(a => a.Id == entity.Id));
+        }
+
+        public void DeleteSpell(int id)
+        {
+            var spell = _repository.GetSingle<Spell>(a => a.Id == id);
+            if (spell == null)
+                throw new Exception("This spell doesn't exists");
+            spell.Deleted = true;
+            _repository.Update(spell);
+            _repository.Commit();
+        }
+
+        public SpellViewModel RestoreSpell(int id)
+        {
+            var spell = _repository.GetSingle<Spell>(a => a.Id == id && a.Deleted == true);
+            if (spell == null)
+                throw new Exception("This spell doesn't exists or isn't deleted.");
+            spell.Deleted = false;
+            _repository.Update(spell);
+            _repository.Commit();
+            return Mapper.Map<Spell, SpellViewModel>(_repository.GetSingle<Spell>(a => a.Id == id));
+        }
+
+        public void AddSpellList(List<SpellViewModel> viewModels)
+        {
+        }
+       
     }
 }

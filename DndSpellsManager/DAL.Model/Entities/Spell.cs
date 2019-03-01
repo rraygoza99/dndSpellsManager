@@ -27,6 +27,9 @@ namespace DAL.Model.Entities
         [Column("spell_type")]
         public SpellType SpellType { get; set; }
 
+        [Column("deleted")]
+        public bool Deleted { get; set; }
+
         [InverseProperty("Spell")]
         public ICollection<SpellSpellbook> SpellSpellbooks { get; set; }
 

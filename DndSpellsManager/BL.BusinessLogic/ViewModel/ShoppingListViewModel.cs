@@ -10,7 +10,7 @@ namespace BL.BusinessLogic.ViewModel
         public int TotalGold { get; set; }
         public int TotalElectrum { get; set; }
         public int TotalSilver { get; set; }
-        public int TotalCupper { get;set }
+        public int TotalCupper { get; set; }
     }
 
     public class ShoppingMaterialViewModel : MaterialViewModel

@@ -17,9 +17,11 @@ namespace BL.BusinessLogic.LogicHandler
             _repository = repository;
         }
 
-        public List<SpellViewModel> GetSpells()
+        public List<SpellViewModel> GetSpells(int idClass = 0, int level = -1)
         {
-            var entity = _repository.GetAll<Spell>().ToList();
+            var entity = _repository.GetAllIncluding<Spell>(a=> a.SpellsClass).ToList();
+            entity = level > -1 ? entity.Where(a => a.Level == level).ToList() : entity;
+            entity = idClass != 0 ? entity.Where(a => a.SpellsClass.Where(b => b.IdClass == idClass).FirstOrDefault() != null).ToList() : entity;
             return Mapper.Map<List<Spell>, List<SpellViewModel>>(entity);
         }
 
@@ -29,49 +31,60 @@ namespace BL.BusinessLogic.LogicHandler
             return Mapper.Map<List<Spell>, List<SpellViewModel>>(entity);
         }
 
-        public ShoppingListViewModel GetShoppingList(int idSpellbook)
+        public SpellViewModel GetSpellById(int id)
         {
-            var spells = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a => a.Spells);
-            var materials = _repository.GetAllWhere<SpellMaterial>(new List<System.Linq.Expressions.Expression<Func<SpellMaterial, bool>>>()
-            {
-                a=> spells.Spells.ToList().Find(b=> b.Id == a.IdSpell) != null
-            }, null, false, a=> a.Material).ToList();
-
-            var materialsSpellbook = new Dictionary<int, ShoppingMaterialViewModel>();
-            foreach(var material in materials)
-            {
-                var id = material.IdMaterial;
-                if(materialsSpellbook.ContainsKey(id))
-                {
-                    materialsSpellbook[id].Quantity += material.Quantity;
-                    materialsSpellbook[id].GoldCost += material.Material.GoldCost;
-                    materialsSpellbook[id].ElectrumCost += material.Material.ElectrumCost;
-                    materialsSpellbook[id].SilverCost += material.Material.SilverCost;
-                    materialsSpellbook[id].CupperCost += material.Material.CupperCost;
-                }
-                else
-                {
-                    materialsSpellbook.Add(id, new ShoppingMaterialViewModel()
-                    {
-                        Id = id,
-                        Description = material.Material.Description,
-                        Quantity = material.Quantity,
-                        GoldCost = material.Material.GoldCost,
-                        SilverCost = material.Material.SilverCost,
-                        ElectrumCost = material.Material.ElectrumCost,
-                        CupperCost = material.Material.CupperCost
-                    });
-                }
-            }
-            var shoppingList = new ShoppingListViewModel()
-            {
-                Materials = materialsSpellbook.Values.ToList(),
-                TotalGold = materialsSpellbook.Sum(a => a.Value.GoldCost),
-                TotalElectrum = materialsSpellbook.Sum(a => a.Value.ElectrumCost),
-                TotalSilver = materialsSpellbook.Sum(a => a.Value.SilverCost),
-                TotalCupper = materialsSpellbook.Sum(a => a.Value.CupperCost),
-            };
-            return shoppingList;
+            var entity = _repository.GetSingle<Spell>(a => a.Id == id, false, a=> a.SpellsClass, a=> a.SpellMaterials);
+            return Mapper.Map<Spell, SpellViewModel>(entity);
         }
+
+        
+
+        public SpellViewModel CreateSpell(SpellViewModel viewModel)
+        {
+            var entity = Mapper.Map<SpellViewModel, Spell>(viewModel);
+            _repository.Add(entity);
+            _repository.Commit();
+            return Mapper.Map<Spell, SpellViewModel>(_repository.GetSingle<Spell>(a => a.Id == entity.Id));
+        }
+
+        public SpellViewModel UpdateSpell(SpellViewModel viewModel)
+        {
+            var entity = _repository.GetSingle<Spell>(a => a.Id == viewModel.Id);
+            if (entity == null)
+                throw new Exception("Spell doesnt exist.");
+            entity.Level = viewModel.Level;
+            entity.Name = viewModel.Name;
+            entity.SpellType = viewModel.SpellType;
+            _repository.Update(entity);
+            _repository.Commit();
+            entity = _repository.GetSingle<Spell>(a => a.Id == viewModel.Id);
+            return Mapper.Map<Spell, SpellViewModel>(entity);
+        }
+
+        public void DeleteSpell(int id)
+        {
+            var spell = _repository.GetSingle<Spell>(a => a.Id == id);
+            if (spell == null)
+                throw new Exception("This spell doesn't exists");
+            spell.Deleted = true;
+            _repository.Update(spell);
+            _repository.Commit();
+        }
+
+        public SpellViewModel RestoreSpell(int id)
+        {
+            var spell = _repository.GetSingle<Spell>(a => a.Id == id && a.Deleted == true);
+            if (spell == null)
+                throw new Exception("This spell doesn't exists or isn't deleted.");
+            spell.Deleted = false;
+            _repository.Update(spell);
+            _repository.Commit();
+            return Mapper.Map<Spell, SpellViewModel>(_repository.GetSingle<Spell>(a => a.Id == id));
+        }
+
+        public void AddSpellList(List<SpellViewModel> viewModels)
+        {
+        }
+       
     }
 }

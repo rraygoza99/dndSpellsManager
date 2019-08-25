@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Model.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,6 +13,11 @@ namespace BL.BusinessLogic.ViewModel
         public int Id { get; set; }
         public string Name { get; set; }
         public int IdUser { get; set; }
+        public string NameCharacter { get; set; }
+        public int IdClass { get; set; }
+        public int LevelCharacter { get; set; }
+        public SpellType PrincipalFocusType { get; set; }
+        public SpellType? SideFocusType { get; set; }
         public SpellsKnownViewModel Spells { get; set; }
         public SpellbookFocusType SpellbookFocusType { get; set; }
     }

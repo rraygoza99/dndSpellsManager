@@ -22,7 +22,7 @@ namespace BL.BusinessLogic.LogicHandler
             var entity = _repository.GetAllIncluding<Spell>(a=> a.SpellsClass).ToList();
             entity = level > -1 ? entity.Where(a => a.Level == level).ToList() : entity;
             entity = idClass != 0 ? entity.Where(a => a.SpellsClass.Where(b => b.IdClass == idClass).FirstOrDefault() != null).ToList() : entity;
-            return Mapper.Map<List<Spell>, List<SpellViewModel>>(entity);
+            return Mapper.Map<List<Spell>, List<SpellViewModel>>(entity.ToList());
         }
 
         public List<SpellViewModel> GetSpellsPreview()
@@ -66,20 +66,8 @@ namespace BL.BusinessLogic.LogicHandler
             var spell = _repository.GetSingle<Spell>(a => a.Id == id);
             if (spell == null)
                 throw new Exception("This spell doesn't exists");
-            spell.Deleted = true;
-            _repository.Update(spell);
+            _repository.Delete(spell);
             _repository.Commit();
-        }
-
-        public SpellViewModel RestoreSpell(int id)
-        {
-            var spell = _repository.GetSingle<Spell>(a => a.Id == id && a.Deleted == true);
-            if (spell == null)
-                throw new Exception("This spell doesn't exists or isn't deleted.");
-            spell.Deleted = false;
-            _repository.Update(spell);
-            _repository.Commit();
-            return Mapper.Map<Spell, SpellViewModel>(_repository.GetSingle<Spell>(a => a.Id == id));
         }
 
         public void AddSpellList(List<SpellViewModel> viewModels)

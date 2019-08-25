@@ -75,19 +75,24 @@ namespace BL.BusinessLogic.LogicHandler
             var spellbook = _repository.GetSingle<Spellbook>(a => a.Id == idSpellbook, false, a => a.SpellbookSpells);
             var viewModel = Mapper.Map<Spellbook, SpellbookViewModel>(spellbook);
             viewModel.Spells = GetSpellsBySpellbook(idSpellbook);
-            viewModel.SpellbookFocusType = GetFocusType(spellbook.SpellbookSpells.ToList());
+            if (spellbook.SpellbookSpells.Count() > 0)
+                viewModel.SpellbookFocusType = GetFocusType(spellbook.SpellbookSpells.ToList());
+            else
+                viewModel.SpellbookFocusType = new SpellbookFocusType();
             return viewModel;
         }
 
         public SpellsKnownViewModel GetSpellsBySpellbook(int idSpellbook)
         {
-            var spellbook = _repository.GetAllWhere(new List<System.Linq.Expressions.Expression<Func<Spell, bool>>>()
+            var spellSpellbook = _repository.GetAllWhere<Spell>(new List<System.Linq.Expressions.Expression<Func<Spell, bool>>>()
             {
-               a=> a.SpellbookSpells.Where(b=> b.IdSpellbook == idSpellbook).First() != null
+                a=> a.SpellbookSpells.Where(b=>b.IdSpellbook == idSpellbook).Count() != 0
             }).ToList();
-            var spells = ClassifySpellByLevel(Mapper.Map<List<Spell>, List<SpellViewModel>>(spellbook));
             
-            return spells;
+            
+            var spellsKnown = ClassifySpellByLevel(Mapper.Map<List<Spell>, List<SpellViewModel>>(spellSpellbook));
+            
+            return spellsKnown;
         }
 
         public SpellbookViewModel CreateSpellbook(SpellbookViewModel viewModel)
@@ -142,7 +147,7 @@ namespace BL.BusinessLogic.LogicHandler
             var spells = _repository.GetAllWhere<Spell>(new List<System.Linq.Expressions.Expression<Func<Spell, bool>>>()
             {
                 a=> spellsBook.Where(b=> b.IdSpell == a.Id).First() != null
-            });
+            }).ToList();
 
             var focusType = new SpellbookFocusType
             {

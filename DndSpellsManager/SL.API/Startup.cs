@@ -39,6 +39,7 @@ namespace SL.API
             services.AddScoped<IRequestHandler, RequestHandler>();
             services.AddScoped<DndRepository>();
             services.AddScoped<SpellLogicHandler>();
+            services.AddScoped<SpellbookLogicHandler>();
             AutoMapperConfiguration.Configure();
         }
 

@@ -19,6 +19,9 @@ namespace DAL.Model.Entities
         [Column("description")]
         public string Description { get; set; }
 
+        [Column("unit")]
+        public string Unit { get; set; }
+
         [Column("gold_cost")]
         public int GoldCost { get; set; }
 

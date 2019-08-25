@@ -27,8 +27,29 @@ namespace DAL.Model.Entities
         [Column("spell_type")]
         public SpellType SpellType { get; set; }
 
-        [Column("deleted")]
-        public bool Deleted { get; set; }
+        [Column("description")]
+        public string Description { get; set; }
+
+        [Column("magic_school")]
+        public string MagicSchool { get; set; }
+
+        [Column("range")]
+        public string Range { get; set; } 
+
+        [Column("components")]
+        public string Components { get; set; }
+
+        [Column("duration")]
+        public string Duration { get; set; }
+        
+        [Column("ritual")]
+        public bool Ritual { get; set; }
+
+        [Column("concentration")]
+        public bool Concentration { get; set; }
+
+        [Column("casting_time")]
+        public string CastingTime { get; set; }
 
         [InverseProperty("Spell")]
         public ICollection<SpellSpellbook> SpellbookSpells { get; set; }

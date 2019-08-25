@@ -3,14 +3,16 @@ using DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace SL.API.Migrations
 {
     [DbContext(typeof(DndSpellContext))]
-    partial class DndSpellContextModelSnapshot : ModelSnapshot
+    [Migration("20190825025856_added_properties_spell_class")]
+    partial class added_properties_spell_class
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,55 +33,6 @@ namespace SL.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("class");
-                });
-
-            modelBuilder.Entity("DAL.Model.Entities.ClassLevelStats", b =>
-                {
-                    b.Property<int>("IdClass")
-                        .HasColumnName("id_class");
-
-                    b.Property<int>("Level")
-                        .HasColumnName("level");
-
-                    b.Property<int>("CantripsKnown")
-                        .HasColumnName("cantrips_known");
-
-                    b.Property<int>("ProficiencyLevel")
-                        .HasColumnName("proficiency_bonus");
-
-                    b.Property<int>("SpellSlot1")
-                        .HasColumnName("spell_slot_1");
-
-                    b.Property<int>("SpellSlot2")
-                        .HasColumnName("spell_slot_2");
-
-                    b.Property<int>("SpellSlot3")
-                        .HasColumnName("spell_slot_3");
-
-                    b.Property<int>("SpellSlot4")
-                        .HasColumnName("spell_slot_4");
-
-                    b.Property<int>("SpellSlot5")
-                        .HasColumnName("spell_slot_5");
-
-                    b.Property<int>("SpellSlot6")
-                        .HasColumnName("spell_slot_6");
-
-                    b.Property<int>("SpellSlot7")
-                        .HasColumnName("spell_slot_7");
-
-                    b.Property<int>("SpellSlot8")
-                        .HasColumnName("spell_slot_8");
-
-                    b.Property<int>("SpellSlot9")
-                        .HasColumnName("spell_slot_9");
-
-                    b.Property<int>("SpellsKnown")
-                        .HasColumnName("spells_known");
-
-                    b.HasKey("IdClass", "Level");
-
-                    b.ToTable("class_level_stats");
                 });
 
             modelBuilder.Entity("DAL.Model.Entities.Material", b =>
@@ -104,9 +57,6 @@ namespace SL.API.Migrations
                     b.Property<int>("SilverCost")
                         .HasColumnName("silver_cost");
 
-                    b.Property<string>("Unit")
-                        .HasColumnName("unit");
-
                     b.HasKey("Id");
 
                     b.ToTable("material");
@@ -119,14 +69,8 @@ namespace SL.API.Migrations
                         .HasColumnName("id_spell")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CastingTime")
-                        .HasColumnName("casting_time");
-
                     b.Property<string>("Components")
                         .HasColumnName("components");
-
-                    b.Property<bool>("Concentration")
-                        .HasColumnName("concentration");
 
                     b.Property<string>("Description")
                         .HasColumnName("description");
@@ -145,9 +89,6 @@ namespace SL.API.Migrations
 
                     b.Property<string>("Range")
                         .HasColumnName("range");
-
-                    b.Property<bool>("Ritual")
-                        .HasColumnName("ritual");
 
                     b.Property<int>("SpellType")
                         .HasColumnName("spell_type");
@@ -253,14 +194,6 @@ namespace SL.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("user");
-                });
-
-            modelBuilder.Entity("DAL.Model.Entities.ClassLevelStats", b =>
-                {
-                    b.HasOne("DAL.Model.Entities.Class", "Class")
-                        .WithMany("ClassStats")
-                        .HasForeignKey("IdClass")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("DAL.Model.Entities.SpellClass", b =>

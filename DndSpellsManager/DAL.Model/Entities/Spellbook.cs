@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DAL.Model.Entities
 {
-    [Table("spellbool")]
+    [Table("spellbook")]
     public class Spellbook
     {
         public Spellbook()

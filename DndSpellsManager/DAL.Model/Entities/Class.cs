@@ -11,6 +11,7 @@ namespace DAL.Model.Entities
         public Class()
         {
             SpellsClass = new HashSet<SpellClass>();
+            ClassStats = new HashSet<ClassLevelStats>();
         }
 
         [Column("id_class")]
@@ -21,5 +22,8 @@ namespace DAL.Model.Entities
 
         [InverseProperty("Class")]
         public ICollection<SpellClass> SpellsClass { get; set; }
+
+        [InverseProperty("Class")]
+        public ICollection<ClassLevelStats> ClassStats { get; set; }
     }
 }
